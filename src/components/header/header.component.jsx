@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 import { auth } from '../../firebase/firebase.utils';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
 
 import './header.styles.scss';
 
@@ -29,9 +32,10 @@ const Header = ({ currentUser, cartDropdownHidden }) => (
     </div>
 );
 
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden }}) => ({
-    currentUser,
-    cartDropdownHidden: hidden
+// Using createStructuredSelector allows us to avoid passing in state to all selectors; it'll take care of passing it down to each.
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser,
+    cartDropdownHidden: selectCartHidden
 });
 
 export default connect(mapStateToProps)(Header);
